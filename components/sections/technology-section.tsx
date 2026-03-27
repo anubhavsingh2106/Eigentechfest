@@ -90,8 +90,7 @@ export function TechnologySection() {
   const textSectionRef = useRef<HTMLDivElement>(null);
   const [scrollProgress, setScrollProgress] = useState(0);
   const [textProgress, setTextProgress] = useState(0);
-  
-  const descriptionText = "Experience outdoor gear reimagined with cutting-edge technology. Alpine & Forest accessories combine ultra-lightweight materials, intelligent temperature control, and weather-resistant engineering to elevate every adventure. From mountain peaks to forest trails, your gear adapts to the conditions.";
+  const descriptionText = "Experience the excitement of a Tech Fest. A vibrant platform where innovation, creativity, and technology come together. From coding competitions to robotics and live projects, it showcases the skills and ideas of emerging talent. It’s a space to learn, build, compete, and explore the future of technology.";
 
   useEffect(() => {
     const handleScroll = () => {
@@ -210,10 +209,10 @@ export function TechnologySection() {
                 className="absolute inset-0 flex flex-col items-center justify-center px-6 text-center"
               >
                 <h2 className="max-w-3xl font-medium leading-tight tracking-tight text-white md:text-5xl lg:text-7xl text-5xl">
-                  {["Technology", "Meets", "Wilderness."].map((word, index) => {
+                  {["We", "are", "the", "T", "of", "IIIT", "Kota."].map((word, index) => {
                     // Each word fades out sequentially based on scrollProgress
-                    const wordFadeStart = index * 0.07; // Technology: 0, Meets: 0.07, Wilderness: 0.14
-                    const wordFadeEnd = wordFadeStart + 0.07;
+                    const wordFadeStart = index * 0.04;
+                    const wordFadeEnd = wordFadeStart + 0.04;
                     const wordProgress = Math.max(0, Math.min(1, (scrollProgress - wordFadeStart) / (wordFadeEnd - wordFadeStart)));
                     const wordOpacity = 1 - wordProgress;
                     const wordBlur = wordProgress * 10; // 0px to 10px blur
@@ -226,11 +225,11 @@ export function TechnologySection() {
                           opacity: wordOpacity,
                           filter: `blur(${wordBlur}px)`,
                           transition: 'opacity 0.1s linear, filter 0.1s linear',
-                          marginRight: index < 2 ? '0.3em' : '0',
+                          marginRight: index < 6 ? '0.3em' : '0',
                         }}
                       >
                         {word}
-                        {index === 1 && <br />}
+                        {index === 3 && <br />}
                       </span>
                     );
                   })}
