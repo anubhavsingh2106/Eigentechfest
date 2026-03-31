@@ -4,10 +4,10 @@ import Link from "next/link";
 
 const footerLinks = {
   explore: [
-    { label: "Products", href: "#products" },
-    { label: "Technology", href: "#technology" },
+    { label: "Tech Summit", href: "#products" },
+    { label: "Events", href: "#technology" },
     { label: "Gallery", href: "#gallery" },
-    { label: "Accessories", href: "#accessories" },
+    { label: "Past Events", href: "#accessories" },
   ],
   about: [
     { label: "Our Story", href: "#" },

@@ -27,7 +27,7 @@ export function Header() {
       <div className="flex items-center justify-between transition-all duration-300 px-2 pl-5 py-2">
         {/* Logo */}
         <Link href="#" className={`text-lg font-medium tracking-tight transition-colors duration-300 ${isScrolled ? "text-foreground" : "text-white"}`}>
-          EVASION
+          EIGEN
         </Link>
 
         {/* Desktop Navigation */}
@@ -36,13 +36,13 @@ export function Header() {
             href="#products"
             className={`text-sm transition-colors ${isScrolled ? "text-muted-foreground hover:text-foreground" : "text-white/70 hover:text-white"}`}
           >
-            Products
+            Tech Summit
           </Link>
           <Link
             href="#technology"
             className={`text-sm transition-colors ${isScrolled ? "text-muted-foreground hover:text-foreground" : "text-white/70 hover:text-white"}`}
           >
-            Technology
+            Events
           </Link>
           <Link
             href="#gallery"
@@ -54,11 +54,11 @@ export function Header() {
             href="#accessories"
             className={`text-sm transition-colors ${isScrolled ? "text-muted-foreground hover:text-foreground" : "text-white/70 hover:text-white"}`}
           >
-            Accessories
+            Past Events
           </Link>
         </nav>
 
-        {/* CTA */}
+        {/* CTA
         <div className="hidden items-center gap-6 md:flex">
           <Link
             href="#reserve"
@@ -66,7 +66,7 @@ export function Header() {
           >
             Buy the product
           </Link>
-        </div>
+        </div> */}
 
         {/* Mobile Menu Button */}
         <button

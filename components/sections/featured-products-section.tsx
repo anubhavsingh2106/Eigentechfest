@@ -44,7 +44,7 @@ export function FeaturedProductsSection() {
           Our Events
         </h2>
         <p className="mx-auto mt-6 max-w-md text-sm text-muted-foreground">
-          Technology
+          Events
         </p>
       </div>
 
