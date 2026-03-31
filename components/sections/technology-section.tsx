@@ -60,7 +60,7 @@ function ScrollRevealText({ text }: { text: string }) {
 
 const sideImages = [
   {
-    src: "images/WhatsApp Image 2026-03-31 at 5.23.42 PM.jpeg",
+    src: "images/WhatsApp Image 2026-03-31 at 5.24.12 PM.jpeg",
     alt: "Forest trail",
     position: "left",
     span: 1,
@@ -197,7 +197,7 @@ export function TechnologySection() {
               }}
             >
               <Image
-                src="images/WhatsApp Image 2026-03-31 at 5.24.12 PM.jpeg"
+                src="images/WhatsApp Image 2026-03-31 at 5.23.42 PM.jpeg"
                 alt="Aerial view of camping expedition in wilderness"
                 fill
                 className="object-cover"
