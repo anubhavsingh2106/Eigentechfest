@@ -12,14 +12,12 @@ export function GallerySection() {
   const lastScrollRef = useRef(0);
 
   const images = [
-    { src: "/images/bottle-bike.png", alt: "Thermal bottle on bike" },
-    { src: "/images/bottle-lake.png", alt: "Thermal bottle by lake" },
-    { src: "/images/bottle-water.png", alt: "Thermal bottle in water" },
-    { src: "/images/bottle-stream.png", alt: "Thermal bottle by stream" },
-    { src: "/images/bottle-fire.png", alt: "Thermal bottle by fire" },
-    { src: "/images/bottle-snow.png", alt: "Thermal bottle in snow" },
-    { src: "/images/bottle-mountain.png", alt: "Thermal bottle on mountain" },
-    { src: "/images/bottle-canyon.png", alt: "Thermal bottle at canyon" },
+    { src: "/images/algorithmus.png", title: "ALGORITHMUS", alt: "Algorithmus Team" },
+    { src: "/images/arc-robotics.png", title: "ARC ROBOTICS", alt: "Arc Robotics Team" },
+    { src: "/images/gdsc.png", title: "GDSC", alt: "GDSC Team" },
+    { src: "/images/iiit-kernel.png", title: "IIIT KERNEL", alt: "IIIT Kernel Team" },
+    { src: "/images/cyper.png", title: "CYPER", alt: "Cyper Team" },
+    { src: "/images/codebase.png", title: "CODEBASE", alt: "Codebase Team" },
   ];
 
   // Calculate section height based on content width
@@ -45,23 +43,23 @@ export function GallerySection() {
 
   const updateTransform = useCallback(() => {
     if (!galleryRef.current || !containerRef.current) return;
-    
+
     const rect = galleryRef.current.getBoundingClientRect();
     const containerWidth = containerRef.current.scrollWidth;
     const viewportWidth = window.innerWidth;
-    
+
     // Total scroll distance needed to reveal all images
     const totalScrollDistance = containerWidth - viewportWidth;
-    
+
     // Current scroll position within this section
     const scrolled = Math.max(0, -rect.top);
-    
+
     // Progress from 0 to 1
     const progress = Math.min(1, scrolled / totalScrollDistance);
-    
+
     // Calculate new translateX
     const newTranslateX = progress * -totalScrollDistance;
-    
+
     setTranslateX(newTranslateX);
   }, []);
 
@@ -71,14 +69,14 @@ export function GallerySection() {
       if (rafRef.current) {
         cancelAnimationFrame(rafRef.current);
       }
-      
+
       // Use requestAnimationFrame for smooth updates
       rafRef.current = requestAnimationFrame(updateTransform);
     };
 
     window.addEventListener("scroll", handleScroll, { passive: true });
     updateTransform();
-    
+
     return () => {
       window.removeEventListener("scroll", handleScroll);
       if (rafRef.current) {
@@ -88,7 +86,7 @@ export function GallerySection() {
   }, [updateTransform]);
 
   return (
-    <section 
+    <section
       id="gallery"
       ref={galleryRef}
       className="relative bg-background"
@@ -98,9 +96,9 @@ export function GallerySection() {
       <div className="sticky top-0 h-screen overflow-hidden">
         <div className="flex h-full items-center">
           {/* Horizontal scrolling container */}
-          <div 
+          <div
             ref={containerRef}
-            className="flex gap-6 px-6"
+            className="flex gap-12 px-12"
             style={{
               transform: `translate3d(${translateX}px, 0, 0)`,
               WebkitTransform: `translate3d(${translateX}px, 0, 0)`,
@@ -114,19 +112,36 @@ export function GallerySection() {
             {images.map((image, index) => (
               <div
                 key={index}
-                className="relative h-[70vh] w-[85vw] flex-shrink-0 overflow-hidden rounded-2xl md:w-[60vw] lg:w-[45vw]"
+                className="group relative h-[60vh] w-[75vw] flex-shrink-0 overflow-hidden rounded-2xl md:w-[45vw] lg:w-[32vw]"
                 style={{
                   transform: 'translateZ(0)',
                   WebkitTransform: 'translateZ(0)',
                 }}
               >
+                {/* Image Component */}
                 <Image
                   src={image.src || "/placeholder.svg"}
                   alt={image.alt}
                   fill
-                  className="object-cover"
+                  className="object-cover transition-transform duration-700 ease-out group-hover:scale-110"
                   priority={index < 3}
                 />
+
+                {/* Dark Overlay for Text Legibility */}
+                <div className="absolute inset-x-0 bottom-0 h-1/2 bg-gradient-to-t from-black/80 via-black/40 to-transparent transition-opacity duration-300 opacity-60 group-hover:opacity-100" />
+
+                {/* Content Overlay */}
+                <div className="absolute inset-0 flex flex-col justify-end p-8 md:p-12">
+                  <div className="transform translate-y-4 transition-transform duration-500 group-hover:translate-y-0">
+                    <h3 className="text-4xl md:text-5xl lg:text-6xl font-bold tracking-tighter text-white drop-shadow-2xl">
+                      {image.title}
+                    </h3>
+                    <div className="mt-4 h-1 w-0 bg-white transition-all duration-500 group-hover:w-24" />
+                  </div>
+                </div>
+
+                {/* Subtle Border/Glow on hover */}
+                <div className="absolute inset-0 rounded-2xl border border-white/0 transition-colors duration-300 group-hover:border-white/20" />
               </div>
             ))}
           </div>
