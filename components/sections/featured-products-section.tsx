@@ -6,27 +6,27 @@ const features = [
   {
     title: "Hackathon",
     description: "Innovation",
-    image: "/images/d18fe616-5596-4559-90f5-a90f5397d0d8.png",
+    image: "images/WhatsApp Image 2026-04-03 at 10.17.50 PM.jpeg",
   },
   {
     title: "Squid Games",
     description: "Performance",
-    image: "/images/e26fa9c3-966d-4966-94a4-954a1e511c1c.png",
+    image: "images/WhatsApp Image 2026-04-03 at 10.17.46 PM.jpeg",
   },
   {
     title: "Byte Break",
     description: "Durability",
-    image: "/images/car.jpg",
+    image: "/images/WhatsApp Image 2026-04-03 at 10.17.47 PM.jpeg",
   },
   {
     title: "DJ Night",
     description: "Navigation",
-    image: "/images/204cee22-9e85-49e8-9303-1d309af626b0.png",
+    image: "/images/WhatsApp Image 2026-04-03 at 10.17.45 PM.jpeg",
   },
   {
-    title: "Botanical Bid",
+    title: "Disha Session",
     description: "Visibility",
-    image: "/images/led-flashlight-bottle.png",
+    image: "/images/WhatsApp Image 2026-04-03 at 10.17.48 PM.jpeg",
   },
   {
     title: "Latent",
