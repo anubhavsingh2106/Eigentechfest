@@ -2,86 +2,140 @@
 
 import { useEffect, useRef, useState } from "react";
 
-const word = "EIGEN";
+const FRAME_COUNT = 192;
 
 export function HeroSection() {
-  const sectionRef = useRef<HTMLElement>(null);
+  const containerRef = useRef<HTMLElement>(null);
+  const canvasRef = useRef<HTMLCanvasElement>(null);
   const [scrollProgress, setScrollProgress] = useState(0);
-  const [mounted, setMounted] = useState(false);
+  
+  // Store preloaded images
+  const imagesRef = useRef<HTMLImageElement[]>([]);
+  const currentFrameRef = useRef(-1);
 
   useEffect(() => {
-    setMounted(true);
+    
+    // Preload images efficiently
+    const preloadImages = () => {
+      for (let i = 1; i <= FRAME_COUNT; i++) {
+        const img = new Image();
+        // Format index as 00001, 00002, etc. based on the actual files
+        const indexStr = i.toString().padStart(5, '0');
+        img.src = `/animation/sequence/${indexStr}.png`;
+        imagesRef.current.push(img);
+      }
+    };
+    preloadImages();
+
+    const drawFrame = (index: number) => {
+      const canvas = canvasRef.current;
+      const ctx = canvas?.getContext("2d");
+      const img = imagesRef.current[index];
+      
+      if (canvas && ctx && img && img.complete) {
+        // Calculate dimensions to emulate object-fit: cover
+        const canvasRatio = canvas.width / canvas.height;
+        const imgRatio = img.width / img.height;
+        let drawWidth = canvas.width;
+        let drawHeight = canvas.height;
+        let drawX = 0;
+        let drawY = 0;
+
+        if (imgRatio > canvasRatio) {
+           drawWidth = canvas.height * imgRatio;
+           drawX = (canvas.width - drawWidth) / 2;
+        } else {
+           drawHeight = canvas.width / imgRatio;
+           drawY = (canvas.height - drawHeight) / 2;
+        }
+
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        ctx.globalCompositeOperation = "source-over";
+        ctx.drawImage(img, drawX, drawY, drawWidth, drawHeight);
+      }
+    };
 
     const handleScroll = () => {
-      if (!sectionRef.current) return;
+      if (!containerRef.current || !canvasRef.current || imagesRef.current.length === 0) return;
 
-      const rect = sectionRef.current.getBoundingClientRect();
-      const heroHeight = window.innerHeight;
-      const scrolled = -rect.top;
-      const progress = Math.max(0, Math.min(1, scrolled / heroHeight));
+      const rect = containerRef.current.getBoundingClientRect();
+      const containerTop = rect.top;
+      const containerHeight = rect.height;
+      const viewportHeight = window.innerHeight;
 
+      // Calculate scroll progress relative to this pinned container
+      const scrollableDistance = containerHeight - viewportHeight;
+      const scrolled = -containerTop;
+
+      let progress = 0;
+      if (scrollableDistance > 0) {
+        progress = Math.max(0, Math.min(1, scrolled / scrollableDistance));
+      }
+      
       setScrollProgress(progress);
+
+      const frameIndex = Math.min(
+        FRAME_COUNT - 1,
+        Math.floor(progress * FRAME_COUNT)
+      );
+
+      // Render via requestAnimationFrame for smooth performance
+      if (frameIndex !== currentFrameRef.current) {
+        currentFrameRef.current = frameIndex;
+        requestAnimationFrame(() => drawFrame(frameIndex));
+      }
+    };
+
+    // Draw first frame as soon as it loads
+    if (imagesRef.current[0]) {
+      imagesRef.current[0].onload = () => drawFrame(0);
+    }
+
+    const resizeHandler = () => {
+       if (canvasRef.current) {
+          const dpr = window.devicePixelRatio || 1;
+          canvasRef.current.width = window.innerWidth * dpr;
+          canvasRef.current.height = window.innerHeight * dpr;
+          drawFrame(Math.max(0, currentFrameRef.current));
+       }
     };
 
     window.addEventListener("scroll", handleScroll, { passive: true });
+    window.addEventListener("resize", resizeHandler);
+    
+    // Initial Setup
+    resizeHandler();
     handleScroll();
 
     return () => {
       window.removeEventListener("scroll", handleScroll);
+      window.removeEventListener("resize", resizeHandler);
     };
   }, []);
 
-  if (!mounted) {
-    return <section ref={sectionRef} className="relative w-full h-screen bg-black" />;
-  }
-
-  // Text fades and moves up on scroll
-  const textOpacity = Math.max(0, 1 - scrollProgress * 2);
-  const textTranslateY = scrollProgress * 100;
-
   return (
-    <section ref={sectionRef} className="relative w-full h-screen overflow-hidden bg-black">
-      {/* Clean Dark Background */}
-      <div className="absolute inset-0 bg-black" />
+    <section ref={containerRef} className="relative w-full h-[300vh] bg-black">
+      {/* Sticky Player Container */}
+      <div className="sticky top-0 w-full h-screen overflow-hidden bg-black">
+        
+        {/* Canvas Element for 192 frames sequence */}
+        <canvas
+          ref={canvasRef}
+          className="absolute inset-0 w-full h-full object-cover"
+          style={{ opacity: 0.8 }}
+        />
 
-      {/* Video Background Layer - Brighter */}
-      <div className="absolute inset-0 opacity-80">
-        <video
-          autoPlay
-          muted
-          loop
-          playsInline
-          className="w-full h-full object-cover"
+        {/* Scroll Call to Action Indicator */}
+        <div 
+          className="absolute bottom-10 left-1/2 -translate-x-1/2 animate-bounce flex flex-col items-center z-10 transition-opacity duration-500 pointer-events-none"
+          style={{ opacity: scrollProgress < 0.05 ? 0.7 : 0 }}
         >
-          <source src="/videos/145577-787059325_large.mp4" type="video/mp4" />
-        </video>
-      </div>
-
-      {/* Overlay Text - Simple Stroke Only */}
-      <div
-        className="absolute inset-0 flex items-center justify-center overflow-hidden"
-        style={{
-          opacity: textOpacity,
-          transform: `translateY(${textTranslateY}px)`,
-        }}
-      >
-        <div className="relative h-[300px] md:h-[400px] w-full max-w-4xl flex items-center justify-center">
-          {/* EIGEN text with stroke outline only */}
-          <div
-            className="text-8xl md:text-9xl font-black text-transparent"
-            style={{
-              WebkitTextStroke: "2px rgba(255, 255, 255, 0.9)",
-              letterSpacing: "-0.05em",
-              fontFamily: '"Arial", sans-serif',
-            }}
-          >
-            {word}
-          </div>
+          <span className="text-white/60 text-xs md:text-sm tracking-[0.3em] font-light uppercase">
+            Scroll to explore
+          </span>
+          <div className="w-[1px] h-12 bg-gradient-to-b from-white/60 to-transparent mt-4" />
         </div>
       </div>
-
-      {/* Scroll spacing */}
-      <div className="absolute top-full left-0 w-full h-[150vh]" />
     </section>
   );
 }
